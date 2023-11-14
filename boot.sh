@@ -58,7 +58,7 @@ install_xfsprogs() {
 
 # Install Docker and configure user permissions
 install_docker() {
-    source /diphyx/docker.sh
+    sh -s /diphyx/docker.sh
     groupadd docker
     usermod -aG docker "$USER"
     newgrp docker
