@@ -1,0 +1,129 @@
+name: dxflow
+services:
+
+  redis:
+    user: root
+    image: dxflow/redis:latest
+    restart: on-failure:2
+    container_name: dxflow-redis
+    ports:
+      - 6379:6379
+    volumes:
+      - /volume/redis:/bitnami/redis/data
+    networks:
+      - dxflow
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      start_period: 2s
+      interval: 4s
+      timeout: 4s
+      retries: 4
+
+  syslog:
+    user: root
+    image: dxflow/syslog:latest
+    restart: on-failure:2
+    container_name: dxflow-syslog
+    ports:
+      - 601:601/udp
+    networks:
+      - dxflow
+    depends_on:
+      redis:
+        condition: service_healthy
+        restart: false
+
+  api:
+    user: root
+    image: dxflow/api:latest
+    restart: on-failure:2
+    container_name: dxflow-api
+    ports:
+      - 9103:9103
+    environment:
+      - DXF_SECRET_KEY_RW=${SECRET_KEY_RW}
+      - DXF_SECRET_KEY_RO=${SECRET_KEY_RO}
+    volumes:
+      - /volume:/volume
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - dxflow
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9103/public/healthcheck"
+        ]
+      start_period: 2s
+      interval: 4s
+      timeout: 4s
+      retries: 4
+    depends_on:
+      redis:
+        condition: service_healthy
+        restart: false
+      syslog:
+        condition: service_started
+        restart: false
+
+  storage:
+    user: root
+    image: dxflow/ext-storage:latest
+    restart: on-failure:2
+    container_name: dxflow-storage
+    ports:
+      - 9104:9104
+    environment:
+      - DXF_SECRET_KEY_RW=${SECRET_KEY_RW}
+      - DXF_SECRET_KEY_RO=${SECRET_KEY_RO}
+    volumes:
+      - /volume:/volume
+    networks:
+      - dxflow
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9104/public/healthcheck"
+        ]
+      start_period: 2s
+      interval: 4s
+      timeout: 4s
+      retries: 4
+    depends_on:
+      redis:
+        condition: service_healthy
+        restart: false
+
+  proxy:
+    user: root
+    image: dxflow/ext-proxy:latest
+    restart: on-failure:2
+    container_name: dxflow-proxy
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - DXF_PROXY_SERVER_IP=AUTO
+      - DXF_PROXY_HTTPS=True
+      - DXF_PROXY_ZERO_KEY=CZBMV0tYRikeGLm8IL6U6PhRln7hiwUF7GBpevhKo1YU5tfQs6xXigm0GDB9Akn7ZUR3CfpEW1rDntHt
+    volumes:
+      - /volume:/volume
+    networks:
+      - dxflow
+    depends_on:
+      redis:
+        condition: service_healthy
+        restart: false
+
+networks:
+  dxflow:
+    name: dxflow-network
