@@ -39,16 +39,14 @@ set_environments() {
 download_assets() {
     # Create directories
     mkdir -p /diphyx
-    mkdir -p /volume
 
     # Download files
     curl -fsSL -o /diphyx/docker.sh https://get.docker.com
     curl -fsSL -o /diphyx/startup.sh https://raw.githubusercontent.com/diphyx/dxflow/main/startup.sh
-    curl -fsSL -o /diphyx/disk.sh https://raw.githubusercontent.com/diphyx/dxflow/main/disk.sh
     curl -fsSL -o /diphyx/docker-compose.yaml https://raw.githubusercontent.com/diphyx/dxflow/main/docker-compose.yaml
 
     # Set execute permissions
-    chmod +x /diphyx/docker.sh /diphyx/startup.sh /diphyx/disk.sh
+    chmod +x /diphyx/docker.sh /diphyx/startup.sh
 }
 
 # Install xfsprogs
@@ -67,7 +65,7 @@ install_docker() {
 # Mount storage device
 mount_storage() {
     # Create mount directory
-    mkdir -p /mnt/storage
+    mkdir /volume
 
     # Get all block devices and root device
     all_devices=$(lsblk -e 7 -r -d -p -n -o NAME)
@@ -77,8 +75,8 @@ mount_storage() {
     for device in $all_devices; do
         if [ "$device" != "$root_device" ] && ! echo "$device" | grep -q "^${root_device%[0-9]*}"; then
             mkfs -t xfs "$device"
-            mount "$device" /mnt/storage
-            echo "$device /mnt/storage xfs defaults 0 2" >> /etc/fstab
+            mount "$device" /volume
+            echo "$device /volume xfs defaults 0 2" >> /etc/fstab
             break
         fi
     done
@@ -87,6 +85,11 @@ mount_storage() {
 # Initialize crontab
 init_crontab() {
     echo "@reboot /diphyx/startup.sh" | crontab -
+}
+
+# Initialize named pipe
+init_named_pipe() {
+    mkfifo /volume/.pipe
 }
 
 # Run startup script
@@ -111,6 +114,9 @@ mount_storage
 
 # Initialize crontab
 init_crontab
+
+# Initialize named pipe
+init_named_pipe
 
 # Run startup script
 run_startup
