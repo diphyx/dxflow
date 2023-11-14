@@ -84,9 +84,33 @@ mount_storage() {
     done
 }
 
-# Main script execution
+# Initialize crontab
+init_crontab() {
+    echo "@reboot /diphyx/startup.sh" | crontab -
+}
+
+# Run startup script
+run_startup() {
+    /bin/bash /diphyx/startup.sh
+}
+
+# Set environment variables
 set_environments
+
+# Download required assets
 download_assets
+
+# Install xfsprogs
 install_xfsprogs
+
+# Install Docker and configure user permissions
 install_docker
+
+# Mount storage device
 mount_storage
+
+# Initialize crontab
+init_crontab
+
+# Run startup script
+run_startup
