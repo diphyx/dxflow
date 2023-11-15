@@ -126,13 +126,30 @@ services:
     environment:
       - DXF_PROXY_SERVER_IP=AUTO
       - DXF_PROXY_HTTPS=True
-      - DXF_PROXY_ZERO_KEY=CZBMV0tYRikeGLm8IL6U6PhRln7hiwUF7GBpevhKo1YU5tfQs6xXigm0GDB9Akn7ZUR3CfpEW1rDntHt
+      - DXF_PROXY_ZERO_KEY=WvpNYIV77deJRztvqqIRyxvZ8oVv5I03hCqiktBN5RI7WMFLLuyo8X0s1JsOpz1k73QiBrtCRBUr4qDr
     volumes:
       - /volume:/volume
     networks:
       - dxflow
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost/api/public/healthcheck"
+        ]
+      start_period: 10s
+      interval: 30s
+      timeout: 4s
+      retries: 30
     depends_on:
-      redis:
+      api:
+        condition: service_healthy
+        restart: false
+      storage:
         condition: service_healthy
         restart: false
 

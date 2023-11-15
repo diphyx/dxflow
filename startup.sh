@@ -5,6 +5,15 @@ write_log() {
     echo "$(date) | Startup" >> /volume/.log
 }
 
+# Start the DxFlow
+start_dxflow() {
+    if docker compose --file /diphyx/docker-compose.yaml up --detach; then
+        echo "$(date) | DxFlow start successful" >> /volume/.log
+    else
+        echo "$(date) | DxFlow start failed" >> /volume/.log
+    fi
+}
+
 # Listen to the FIFO
 listen_to_pipe() {
     while true; do
@@ -27,20 +36,13 @@ listen_to_pipe() {
     done
 }
 
-# Start the DxFlow
-start_dxflow() {
-    if docker compose --file /diphyx/docker-compose.yaml up --detach; then
-        echo "$(date) | DxFlow start successful" >> /volume/.log
-    else
-        echo "$(date) | DxFlow start failed" >> /volume/.log
-    fi
-}
+
 
 # Write startup log
 write_log
 
-# Listen to the FIFO
-listen_to_pipe
-
 # Start the DxFlow
 start_dxflow
+
+# Listen to the FIFO
+listen_to_pipe
