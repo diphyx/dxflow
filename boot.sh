@@ -20,7 +20,6 @@ install_packages() {
     elif check_command_exists zypper; then
         package_manager="zypper"
     else
-        echo "No supported package manager found."
         exit 1
     fi
 
@@ -29,91 +28,68 @@ install_packages() {
     "$package_manager" install -y "$@"
 }
 
-# Set environment variables
-set_environments() {
-    echo "SECRET_KEY_RW=\"$SECRET_KEY_RW\"" >> /etc/environment
-    echo "SECRET_KEY_RO=\"$SECRET_KEY_RO\"" >> /etc/environment
+# Send compute unit log
+compute_unit_log() {
+    # Init URL
+    url="${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/logs/"
+
+    curl -X PUT -H "Content-Type: application/json" -d "{\"type\": \"$1\", \"message\": \"$2\"}" "${url}" || true
 }
 
-# Download required assets
-download_assets() {
-    # Create directories
-    mkdir -p /diphyx
-
-    # Download files
-    curl -fsSL -o /diphyx/docker.sh https://get.docker.com
-    curl -fsSL -o /diphyx/startup.sh https://raw.githubusercontent.com/diphyx/dxflow/main/startup.sh
-    curl -fsSL -o /diphyx/docker-compose.yaml https://raw.githubusercontent.com/diphyx/dxflow/main/docker-compose.yaml
-
-    # Set execute permissions
-    chmod +x /diphyx/docker.sh /diphyx/startup.sh
-}
-
-# Install xfsprogs
-install_xfsprogs() {
-    install_packages xfsprogs
-}
-
-# Install Docker and configure user permissions
-install_docker() {
-    /bin/bash /diphyx/docker.sh
-}
-
-# Mount storage device
-mount_storage() {
-    # Create mount directory
-    mkdir /volume
-
-    # Get all block devices and root device
-    all_devices=$(lsblk -e 7 -r -d -p -n -o NAME)
-    root_device=$(findmnt -n -o SOURCE / | head -n 1)
-
-    # Find a non-root device and mount it
-    for device in $all_devices; do
-        if [ "$device" != "$root_device" ] && ! echo "$device" | grep -q "^${root_device%[0-9]*}"; then
-            mkfs -t xfs "$device"
-            mount "$device" /volume
-            echo "$device /volume xfs defaults 0 2" >> /etc/fstab
-            break
-        fi
-    done
-}
-
-# Initialize crontab
-init_crontab() {
-    echo "@reboot /diphyx/startup.sh" | crontab -
-}
-
-# Initialize named pipe
-init_named_pipe() {
-    mkfifo /volume/.pipe
-}
-
-# Run startup script
-run_startup() {
-    /bin/bash /diphyx/startup.sh
-}
+# Send compute unit log
+compute_unit_log "INFO" "booting"
 
 # Set environment variables
-set_environments
+echo "DXO_ENDPOINT=\"$DXO_ENDPOINT\"" >> /etc/environment
+echo "DXO_COMPUTE_UNIT_POINTER=\"$DXO_COMPUTE_UNIT_POINTER\"" >> /etc/environment
+echo "DXO_COMPUTE_UNIT_SECRET_KEY_RW=\"$DXO_COMPUTE_UNIT_SECRET_KEY_RW\"" >> /etc/environment
+echo "DXO_COMPUTE_UNIT_SECRET_KEY_RO=\"$DXO_COMPUTE_UNIT_SECRET_KEY_RO\"" >> /etc/environment
 
-# Download required assets
-download_assets
+# Create diphyx directory
+mkdir -p /diphyx
+
+# Download files
+curl -fsSL -o /diphyx/docker.sh https://get.docker.com
+curl -fsSL -o /diphyx/startup.sh https://raw.githubusercontent.com/diphyx/dxflow/main/startup.sh
+curl -fsSL -o /diphyx/docker-compose.yaml https://raw.githubusercontent.com/diphyx/dxflow/main/docker-compose.yaml
+
+# Set execute permissions
+chmod +x /diphyx/docker.sh /diphyx/startup.sh
+
+# Send compute unit log
+compute_unit_log "INFO" "installing"
 
 # Install xfsprogs
-install_xfsprogs
+install_packages xfsprogs
 
-# Install Docker and configure user permissions
-install_docker
+# Install Docker
+/bin/bash /diphyx/docker.sh
 
-# Mount storage device
-mount_storage
+# Create mount directory
+mkdir /volume
+
+# Get all block devices and root device
+all_disk_devices=$(lsblk -e 7 -r -d -p -n -o NAME)
+root_disk_device=$(findmnt -n -o SOURCE / | head -n 1)
+
+# Find a non-root device and mount it
+for disk_device in $all_disk_devices; do
+    if [ "$disk_device" != "$root_disk_device" ] && ! echo "$disk_device" | grep -q "^${root_disk_device%[0-9]*}"; then
+        mkfs -t xfs "$disk_device"
+        mount "$disk_device" /volume
+        echo "$disk_device /volume xfs defaults 0 2" >> /etc/fstab
+        break
+    fi
+done
 
 # Initialize crontab
-init_crontab
+echo "@reboot /diphyx/startup.sh" | crontab -
 
 # Initialize named pipe
-init_named_pipe
+mkfifo /volume/.pipe
+
+# Send compute unit log
+compute_unit_log "INFO" "starting"
 
 # Run startup script
-run_startup
+/bin/bash /diphyx/startup.sh
