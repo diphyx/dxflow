@@ -21,8 +21,16 @@ listen_to_pipe() {
     done
 }
 
+# Start the DxFlow
+start_dxflow(){
+    docker compose --file /diphyx/docker-compose.yaml up --detach
+}
+
 # Write startup log
 write_log
 
 # Listen to the FIFO
 listen_to_pipe
+
+# Start the DxFlow
+start_dxflow
