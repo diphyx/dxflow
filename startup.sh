@@ -2,7 +2,7 @@
 
 # Write startup log
 write_log() {
-    date >> /volume/.startup.log
+    echo "$(date) | Startup" >> /volume/.log
 }
 
 # Listen to the FIFO
@@ -10,20 +10,30 @@ listen_to_pipe() {
     while true; do
         if read -r input < "/volume/.pipe"; then
             case $input in
-            log)
-                date >> /volume/.pipe.log
+            test)
+                 echo "$(date) | Pipe test" >> /volume/.log
                 ;;
             expand_disk)
-                xfs_growfs -d /volume
+                if xfs_growfs -d /volume; then
+                    echo "$(date) | Disk expansion successful" >> /volume/.log
+                else
+                    echo "$(date) | Disk expansion failed" >> /volume/.log
+                fi
                 ;;
             esac
+        else
+            echo "$(date) | Pipe error" >> /volume/.log
         fi
     done
 }
 
 # Start the DxFlow
-start_dxflow(){
-    docker compose --file /diphyx/docker-compose.yaml up --detach
+start_dxflow() {
+    if docker compose --file /diphyx/docker-compose.yaml up --detach; then
+        echo "$(date) | DxFlow start successful" >> /volume/.log
+    else
+        echo "$(date) | DxFlow start failed" >> /volume/.log
+    fi
 }
 
 # Write startup log

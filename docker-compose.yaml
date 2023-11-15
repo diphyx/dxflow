@@ -4,7 +4,7 @@ services:
   redis:
     user: root
     image: dxflow/redis:latest
-    restart: on-failure:2
+    restart: on-failure:1
     container_name: dxflow-redis
     ports:
       - 6379:6379
@@ -14,20 +14,32 @@ services:
       - dxflow
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
-      start_period: 2s
+      start_period: 4s
       interval: 4s
       timeout: 4s
-      retries: 4
+      retries: 1
 
   syslog:
     user: root
     image: dxflow/syslog:latest
-    restart: on-failure:2
+    restart: on-failure:1
     container_name: dxflow-syslog
     ports:
       - 601:601/udp
     networks:
       - dxflow
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "sh",
+          "-c",
+          "timeout 2 nc -vz -u localhost 601 || exit 1"
+        ]
+      start_period: 4s
+      interval: 4s
+      timeout: 4s
+      retries: 1
     depends_on:
       redis:
         condition: service_healthy
@@ -36,7 +48,7 @@ services:
   api:
     user: root
     image: dxflow/api:latest
-    restart: on-failure:2
+    restart: on-failure:1
     container_name: dxflow-api
     ports:
       - 9103:9103
@@ -58,10 +70,10 @@ services:
           "--spider",
           "http://localhost:9103/public/healthcheck"
         ]
-      start_period: 2s
+      start_period: 4s
       interval: 4s
       timeout: 4s
-      retries: 4
+      retries: 1
     depends_on:
       redis:
         condition: service_healthy
@@ -73,7 +85,7 @@ services:
   storage:
     user: root
     image: dxflow/ext-storage:latest
-    restart: on-failure:2
+    restart: on-failure:1
     container_name: dxflow-storage
     ports:
       - 9104:9104
@@ -94,10 +106,10 @@ services:
           "--spider",
           "http://localhost:9104/public/healthcheck"
         ]
-      start_period: 2s
+      start_period: 4s
       interval: 4s
       timeout: 4s
-      retries: 4
+      retries: 1
     depends_on:
       redis:
         condition: service_healthy
@@ -106,7 +118,7 @@ services:
   proxy:
     user: root
     image: dxflow/ext-proxy:latest
-    restart: on-failure:2
+    restart: on-failure:1
     container_name: dxflow-proxy
     ports:
       - 80:80

@@ -57,12 +57,6 @@ install_xfsprogs() {
 # Install Docker and configure user permissions
 install_docker() {
     /bin/bash /diphyx/docker.sh
-
-    # Get the name of a non-root user
-    non_root_user=$(ls -1 /home | head -n 1 | tr -d '[:space:]')
-
-    groupadd docker
-    usermod -aG docker "$non_root_user"
 }
 
 # Mount storage device
