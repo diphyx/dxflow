@@ -34,7 +34,7 @@ compute_unit_log() {
     url="${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/logs/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}"
 
     # Send request
-    curl -X PUT -H "Content-Type: application/json" -d "{\"type\": \"$1\", \"message\": \"$2\"}" "${url}" || true
+    curl -X PUT -H "Content-Type: application/json" -d "{\"type\": \"$1\", \"message\": \"$2\"}" "${url}" --connect-timeout 1 || true
 }
 
 # Send compute unit log
