@@ -31,7 +31,7 @@ install_packages() {
 # Send compute unit log
 compute_unit_log() {
     # Init URL
-    url="${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/logs/"
+    url="${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/logs/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}"
 
     # Send request
     curl -X PUT -H "Content-Type: application/json" -d "{\"type\": \"$1\", \"message\": \"$2\"}" "${url}" || true
