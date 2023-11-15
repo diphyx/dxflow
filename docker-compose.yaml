@@ -126,7 +126,7 @@ services:
     environment:
       - DXF_PROXY_SERVER_IP=AUTO
       - DXF_PROXY_HTTPS=True
-      - DXF_PROXY_ZERO_KEY=WvpNYIV77deJRztvqqIRyxvZ8oVv5I03hCqiktBN5RI7WMFLLuyo8X0s1JsOpz1k73QiBrtCRBUr4qDr
+      - DXF_PROXY_ZERO_KEY=${DXO_ZERO_KEY}
     volumes:
       - /volume:/volume
     networks:

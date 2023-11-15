@@ -33,6 +33,7 @@ compute_unit_log() {
     # Init URL
     url="${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/logs/"
 
+    # Send request
     curl -X PUT -H "Content-Type: application/json" -d "{\"type\": \"$1\", \"message\": \"$2\"}" "${url}" || true
 }
 
@@ -41,6 +42,7 @@ compute_unit_log "INFO" "booting"
 
 # Set environment variables
 echo "DXO_ENDPOINT=\"$DXO_ENDPOINT\"" >> /etc/environment
+echo "DXO_ZERO_KEY=\"$DXO_ZERO_KEY\"" >> /etc/environment
 echo "DXO_COMPUTE_UNIT_POINTER=\"$DXO_COMPUTE_UNIT_POINTER\"" >> /etc/environment
 echo "DXO_COMPUTE_UNIT_SECRET_KEY_RW=\"$DXO_COMPUTE_UNIT_SECRET_KEY_RW\"" >> /etc/environment
 echo "DXO_COMPUTE_UNIT_SECRET_KEY_RO=\"$DXO_COMPUTE_UNIT_SECRET_KEY_RO\"" >> /etc/environment
@@ -78,6 +80,7 @@ for disk_device in $all_disk_devices; do
         mkfs -t xfs "$disk_device"
         mount "$disk_device" /volume
         echo "$disk_device /volume xfs defaults 0 2" >> /etc/fstab
+        
         break
     fi
 done
