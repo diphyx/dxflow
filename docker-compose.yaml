@@ -156,6 +156,35 @@ services:
         condition: service_healthy
         restart: false
 
+  signal:
+    user: root
+    image: dxflow/alpine:latest
+    restart: on-failure:2
+    container_name: dxflow-signal
+    command:
+      [
+        "curl",
+        "-X",
+        "PUT",
+        "${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/active/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}"
+      ]
+    depends_on:
+      redis:
+        condition: service_healthy
+        restart: false
+      syslog:
+        condition: service_started
+        restart: false
+      api:
+        condition: service_healthy
+        restart: false
+      storage:
+        condition: service_healthy
+        restart: false
+      proxy:
+        condition: service_healthy
+        restart: false
+
 networks:
   dxflow:
     name: dxflow-network
