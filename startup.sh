@@ -4,7 +4,7 @@
 echo "$(date) | Startup" >> /volume/.log
 
 # Start the DxFlow
-if docker compose --file /diphyx/docker-compose.yaml up --detach; then
+if docker compose --file /diphyx/docker-compose.yaml up --force-recreate --detach; then
     echo "$(date) | DxFlow start successful" >> /volume/.log
 else
     echo "$(date) | DxFlow start failed" >> /volume/.log
