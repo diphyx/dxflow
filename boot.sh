@@ -28,17 +28,17 @@ install_packages() {
     "$package_manager" install -y "$@"
 }
 
-# Send compute unit log
-compute_unit_log() {
+# Send compute unit event
+send_compute_unit_events() {
     # Init URL
-    url="${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/logs/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}"
+    url="${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/events/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}"
 
     # Send request
     curl -X PUT -H "Content-Type: application/json" -d "{\"type\": \"$1\", \"message\": \"$2\"}" "${url}" --connect-timeout 3 || true
 }
 
-# Send compute unit log
-compute_unit_log "INFO" "booting"
+# Send compute unit event
+send_compute_unit_events "INFO" "booting"
 
 # Set environment variables
 echo "DXO_ENDPOINT=\"$DXO_ENDPOINT\"" >> /etc/environment
@@ -58,8 +58,8 @@ curl -fsSL -o /diphyx/docker-compose.yaml https://raw.githubusercontent.com/diph
 # Set execute permissions
 chmod +x /diphyx/docker.sh /diphyx/startup.sh
 
-# Send compute unit log
-compute_unit_log "INFO" "installing"
+# Send compute unit event
+send_compute_unit_events "INFO" "installing"
 
 # Install xfsprogs
 install_packages xfsprogs
@@ -91,8 +91,8 @@ echo "@reboot /diphyx/startup.sh" | crontab -
 # Initialize named pipe
 mkfifo /volume/.pipe
 
-# Send compute unit log
-compute_unit_log "INFO" "starting"
+# Send compute unit event
+send_compute_unit_events "INFO" "starting"
 
 # Run startup script
 /bin/bash /diphyx/startup.sh
