@@ -166,7 +166,7 @@ services:
         "curl",
         "-X",
         "PUT",
-        "${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/active/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}"
+        "${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/ready/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}"
       ]
     depends_on:
       redis:
