@@ -17,7 +17,7 @@ services:
       start_period: 4s
       interval: 4s
       timeout: 4s
-      retries: 1
+      retries: 4
 
   syslog:
     user: root
@@ -39,7 +39,7 @@ services:
       start_period: 4s
       interval: 4s
       timeout: 4s
-      retries: 1
+      retries: 4
     depends_on:
       redis:
         condition: service_healthy
@@ -64,16 +64,15 @@ services:
       test:
         [
           "CMD",
-          "wget",
-          "--quiet",
-          "--tries=1",
-          "--spider",
-          "http://localhost:9103/public/healthcheck"
+          "curl",
+          "-f",
+          "-s",
+          "http://localhost:9103/public/healthcheck/"
         ]
-      start_period: 4s
+      start_period: 8s
       interval: 4s
       timeout: 4s
-      retries: 1
+      retries: 4
     depends_on:
       redis:
         condition: service_healthy
@@ -100,16 +99,15 @@ services:
       test:
         [
           "CMD",
-          "wget",
-          "--quiet",
-          "--tries=1",
-          "--spider",
-          "http://localhost:9104/public/healthcheck"
+          "curl",
+          "-f",
+          "-s",
+          "http://localhost:9104/public/healthcheck/"
         ]
-      start_period: 4s
+      start_period: 8s
       interval: 4s
       timeout: 4s
-      retries: 1
+      retries: 4
     depends_on:
       redis:
         condition: service_healthy
@@ -135,16 +133,15 @@ services:
       test:
         [
           "CMD",
-          "wget",
-          "--quiet",
-          "--tries=1",
-          "--spider",
-          "http://localhost/api/public/healthcheck"
+          "curl",
+          "-f",
+          "-s",
+          "http://localhost/api/public/healthcheck/"
         ]
-      start_period: 10s
-      interval: 30s
+      start_period: 16s
+      interval: 32s
       timeout: 4s
-      retries: 30
+      retries: 32
     depends_on:
       redis:
         condition: service_healthy
