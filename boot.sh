@@ -47,16 +47,16 @@ echo "DXO_COMPUTE_UNIT_POINTER=\"$DXO_COMPUTE_UNIT_POINTER\"" >> /etc/environmen
 echo "DXO_COMPUTE_UNIT_SECRET_KEY_RW=\"$DXO_COMPUTE_UNIT_SECRET_KEY_RW\"" >> /etc/environment
 echo "DXO_COMPUTE_UNIT_SECRET_KEY_RO=\"$DXO_COMPUTE_UNIT_SECRET_KEY_RO\"" >> /etc/environment
 
-# Create diphyx directory
-mkdir -p /diphyx
+# Create dx directory
+mkdir /dx
 
 # Download files
-curl -fsSL -o /diphyx/docker.sh https://get.docker.com
-curl -fsSL -o /diphyx/startup.sh https://raw.githubusercontent.com/diphyx/dxflow/main/startup.sh
-curl -fsSL -o /diphyx/docker-compose.yaml https://raw.githubusercontent.com/diphyx/dxflow/main/docker-compose.yaml
+curl -fsSL -o /dx/docker.sh https://get.docker.com
+curl -fsSL -o /dx/startup.sh https://raw.githubusercontent.com/diphyx/dxflow/main/startup.sh
+curl -fsSL -o /dx/docker-compose.yaml https://raw.githubusercontent.com/diphyx/dxflow/main/docker-compose.yaml
 
 # Set execute permissions
-chmod +x /diphyx/docker.sh /diphyx/startup.sh
+chmod +x /dx/docker.sh /dx/startup.sh
 
 # Send compute unit event
 send_compute_unit_events "INFO" "installing"
@@ -65,7 +65,7 @@ send_compute_unit_events "INFO" "installing"
 install_packages xfsprogs
 
 # Install Docker
-/bin/bash /diphyx/docker.sh
+/bin/bash /dx/docker.sh
 
 # Create mount directory
 mkdir /volume
@@ -86,13 +86,14 @@ for disk_device in $all_disk_devices; do
 done
 
 # Initialize crontab
-echo "@reboot /diphyx/startup.sh" | crontab -
+echo "@reboot /dx/startup.sh" | crontab -
 
 # Initialize named pipe
-mkfifo /volume/.pipe
+mkdir -p /volume/.dx
+mkfifo /volume/.dx/.pipe
 
 # Send compute unit event
 send_compute_unit_events "INFO" "starting"
 
 # Run startup script
-/bin/bash /diphyx/startup.sh
+/bin/bash /dx/startup.sh
