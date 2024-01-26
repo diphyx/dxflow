@@ -125,6 +125,8 @@ services:
       - DXF_PROXY_SERVER_IP=AUTO
       - DXF_PROXY_HTTPS=True
       - DXF_PROXY_ZERO_KEY=${DXO_ZERO_KEY}
+      - DXF_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+      - DXF_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
     volumes:
       - /volume:/volume
     networks:
