@@ -112,6 +112,39 @@ services:
       redis:
         condition: service_healthy
         restart: false
+  
+  sync:
+    user: root
+    image: dxflow/ext-sync:latest
+    restart: on-failure:1
+    container_name: dxflow-sync
+    ports:
+      - 9105:9105
+    environment:
+      - DXF_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+      - DXF_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+      - DXF_SYNC_MAX_OPS=4
+    volumes:
+      - /volume:/volume
+    networks:
+      - dxflow
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "-s",
+          "http://localhost:9105/public/healthcheck/"
+        ]
+      start_period: 8s
+      interval: 4s
+      timeout: 4s
+      retries: 4
+    depends_on:
+      redis:
+        condition: service_healthy
+        restart: false
 
   proxy:
     user: root
@@ -123,7 +156,7 @@ services:
       - 443:443
     environment:
       - DXF_PROXY_SERVER_IP=AUTO
-      - DXF_PROXY_HTTPS=True
+      - DXF_PROXY_HTTPS=TRUE
       - DXF_PROXY_ZERO_KEY=${DXO_ZERO_KEY}
       - DXF_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
       - DXF_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
@@ -152,6 +185,9 @@ services:
         condition: service_healthy
         restart: false
       storage:
+        condition: service_healthy
+        restart: false
+      sync:
         condition: service_healthy
         restart: false
 
