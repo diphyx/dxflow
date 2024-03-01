@@ -1,6 +1,6 @@
 # dxflow
 
-DxFlow Public Assets
+dxflow public assets
 
 ### Case
 
