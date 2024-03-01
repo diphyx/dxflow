@@ -4,10 +4,11 @@
 echo "$(date) | startup" >> /volume/.dx/.events
 
 # Start the dxflow
-if docker compose --file /dx/docker-compose.yaml up --force-recreate --detach; then
+startError=$(docker compose --file /dx/docker-compose.yaml up --force-recreate --detach 2>&1 >/dev/null)
+if [ -z "$startError" ]; then
     echo "$(date) | dxflow start successful" >> /volume/.dx/.events
 else
-    echo "$(date) | dxflow start failed" >> /volume/.dx/.events
+    echo "$(date) | dxflow start failed: $startError" >> /volume/.dx/.events
 fi
 
 # Listen to the FIFO
@@ -18,23 +19,26 @@ while true; do
                 echo "$(date) | pipe test" >> /volume/.dx/.events
             ;;
         restart_dxflow)
-            if docker compose --file /dx/docker-compose.yaml down; then
+            stopError=$(docker compose --file /dx/docker-compose.yaml down 2>&1 >/dev/null)
+             if [ -z "$stopError" ]; then
                 echo "$(date) | dxflow stop successful" >> /volume/.dx/.events
 
-                if docker compose --file /dx/docker-compose.yaml up --detach; then
+                restartError=$(docker compose --file /dx/docker-compose.yaml down 2>&1 >/dev/null)
+                if [ -z "$restartError" ]; then
                     echo "$(date) | dxflow restart successful" >> /volume/.dx/.events
                 else
-                    echo "$(date) | dxflow restart failed" >> /volume/.dx/.events
+                    echo "$(date) | dxflow restart failed: $restartError" >> /volume/.dx/.events
                 fi
             else
-                echo "$(date) | dxflow stop failed" >> /volume/.dx/.events
+                echo "$(date) | dxflow stop failed: $stopError" >> /volume/.dx/.events
             fi
             ;;
         expand_disk)
-            if xfs_growfs -d /volume; then
+            expandDiskError=$(xfs_growfs -d /volume 2>&1 >/dev/null)
+            if [ -z "$expandDiskError" ]; then
                 echo "$(date) | disk expansion successful" >> /volume/.dx/.events
             else
-                echo "$(date) | disk expansion failed" >> /volume/.dx/.events
+                echo "$(date) | disk expansion failed: $expandDiskError" >> /volume/.dx/.events
             fi
             ;;
         esac
