@@ -8,12 +8,12 @@ PIPE_FILE="$VOLUME_PATH/.dx/.pipe"
 
 DOCKER_COMPOSE_FILE="$DX_PATH/docker-compose.yaml"
 
-# a wrapper to log an event
+# A wrapper to log an event
 log_event() {
     echo "[$(date +"%Y-%m-%d %H:%M:%S")] $*" >>"$LOG_FILE"
 }
 
-# a wrapper to execute a command and log the output
+# A wrapper to execute a command and log the output
 execute_command() {
     log_event ">> $*"
 
@@ -28,28 +28,28 @@ execute_command() {
     return $status
 }
 
-# starts the dxflow service
+# Starts the dxflow service
 start_dxflow() {
     execute_command docker compose --progress quiet --file "$DOCKER_COMPOSE_FILE" up --quiet-pull --force-recreate --detach
 
     return $?
 }
 
-# stops the dxflow service
+# Stops the dxflow service
 stop_dxflow() {
     execute_command docker compose --progress quiet --file "$DOCKER_COMPOSE_FILE" down
 
     return $?
 }
 
-# expands the volume disk
+# Expands the volume disk
 expand_disk() {
     execute_command xfs_growfs -d "$VOLUME_PATH"
 
     return $?
 }
 
-# processes the input from the pipe
+# Processes the input from the pipe
 process_pipe_input() {
     case $1 in
     test)
@@ -73,10 +73,10 @@ process_pipe_input() {
     esac
 }
 
-# startup
+# Startup
 log_event ">> startup"
 
-# run the dxflow service
+# Run the dxflow service
 if start_dxflow; then
     while true; do
         if read -r input <"$PIPE_FILE"; then
