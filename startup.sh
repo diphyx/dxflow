@@ -1,48 +1,88 @@
 #!/bin/bash
 
-# Write startup event
-echo "$(date) | startup" >> /volume/.dx/.events
+DX_PATH="/dx"
+VOLUME_PATH="/volume"
 
-# Start the dxflow
-startError=$(docker compose --file /dx/docker-compose.yaml up --force-recreate --detach 2>&1 >/dev/null)
-if [ -z "$startError" ]; then
-    echo "$(date) | dxflow start successful" >> /volume/.dx/.events
-else
-    echo "$(date) | dxflow start failed: $startError" >> /volume/.dx/.events
-fi
+LOG_FILE="$VOLUME_PATH/.dx/.events"
+PIPE_FILE="$VOLUME_PATH/.dx/.pipe"
 
-# Listen to the FIFO
-while true; do
-    if read -r input < "/volume/.dx/.pipe"; then
-        case $input in
-        test)
-                echo "$(date) | pipe test" >> /volume/.dx/.events
-            ;;
-        restart_dxflow)
-            stopError=$(docker compose --file /dx/docker-compose.yaml down 2>&1 >/dev/null)
-             if [ -z "$stopError" ]; then
-                echo "$(date) | dxflow stop successful" >> /volume/.dx/.events
+DOCKER_COMPOSE_FILE="$DX_PATH/docker-compose.yaml"
 
-                restartError=$(docker compose --file /dx/docker-compose.yaml down 2>&1 >/dev/null)
-                if [ -z "$restartError" ]; then
-                    echo "$(date) | dxflow restart successful" >> /volume/.dx/.events
-                else
-                    echo "$(date) | dxflow restart failed: $restartError" >> /volume/.dx/.events
-                fi
-            else
-                echo "$(date) | dxflow stop failed: $stopError" >> /volume/.dx/.events
-            fi
-            ;;
-        expand_disk)
-            expandDiskError=$(xfs_growfs -d /volume 2>&1 >/dev/null)
-            if [ -z "$expandDiskError" ]; then
-                echo "$(date) | disk expansion successful" >> /volume/.dx/.events
-            else
-                echo "$(date) | disk expansion failed: $expandDiskError" >> /volume/.dx/.events
-            fi
-            ;;
-        esac
+# a wrapper to log an event
+log_event() {
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $*" >>"$LOG_FILE"
+}
+
+# a wrapper to execute a command and log the output
+execute_command() {
+    log_event ">> $*"
+
+    output=$("$@" 2>&1)
+    status=$?
+    if [ $status -eq 0 ]; then
+        log_event "<< successful"
     else
-        echo "$(date) | pipe error" >> /volume/.dx/.events
+        log_event "<< $output"
     fi
-done
+
+    return $status
+}
+
+# starts the dxflow service
+start_dxflow() {
+    execute_command docker compose --progress quiet --file "$DOCKER_COMPOSE_FILE" up --quiet-pull --force-recreate --detach
+
+    return $?
+}
+
+# stops the dxflow service
+stop_dxflow() {
+    execute_command docker compose --progress quiet --file "$DOCKER_COMPOSE_FILE" down
+
+    return $?
+}
+
+# expands the volume disk
+expand_disk() {
+    execute_command xfs_growfs -d "$VOLUME_PATH"
+
+    return $?
+}
+
+# processes the input from the pipe
+process_pipe_input() {
+    case $1 in
+    test)
+        log_event "<< pipe test"
+        ;;
+    restart_dxflow)
+        log_event "<< pipe restart_dxflow"
+
+        if stop_dxflow; then
+            start_dxflow
+        fi
+        ;;
+    expand_disk)
+        log_event "<< pipe expand_disk"
+
+        expand_disk
+        ;;
+    *)
+        log_event "<< pipe $1"
+        ;;
+    esac
+}
+
+# startup
+log_event ">> startup"
+
+# run the dxflow service
+if start_dxflow; then
+    while true; do
+        if read -r input <"$PIPE_FILE"; then
+            process_pipe_input "$input"
+        else
+            log_event "<< pipe error, exit status: $?, PIPESTATUS: ${PIPESTATUS[*]}"
+        fi
+    done
+fi
