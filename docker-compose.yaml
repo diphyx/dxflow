@@ -34,7 +34,7 @@ services:
           "CMD",
           "sh",
           "-c",
-          "timeout 2 nc -vz -u localhost 601 || exit 1"
+          "nc -w1 -u localhost 601 || exit 1"
         ]
       start_period: 4s
       interval: 4s
