@@ -74,7 +74,6 @@ mkdir /volume
 mkfs -t xfs /dev/sdc
 mount /dev/sdc /volume
 echo "/dev/sdc /volume xfs defaults 0 2" >> /etc/fstab
-        
 
 # Initialize crontab
 echo "@reboot /dx/startup.sh" | crontab -
