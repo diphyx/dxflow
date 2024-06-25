@@ -70,20 +70,11 @@ install_packages xfsprogs
 # Create mount directory
 mkdir /volume
 
-# Get all block devices and root device
-all_disk_devices=$(lsblk -e 7 -r -d -p -n -o NAME)
-root_disk_device=$(findmnt -n -o SOURCE / | head -n 1)
-
-# Find a non-root device and mount it
-for disk_device in $all_disk_devices; do
-    if [ "$disk_device" != "$root_disk_device" ] && ! echo "$disk_device" | grep -q "^${root_disk_device%[0-9]*}"; then
-        mkfs -t xfs "$disk_device"
-        mount "$disk_device" /volume
-        echo "$disk_device /volume xfs defaults 0 2" >> /etc/fstab
+# Format and mount disk
+mkfs -t xfs /dev/sdc
+mount /dev/sdc /volume
+echo "/dev/sdc /volume xfs defaults 0 2" >> /etc/fstab
         
-        break
-    fi
-done
 
 # Initialize crontab
 echo "@reboot /dx/startup.sh" | crontab -
