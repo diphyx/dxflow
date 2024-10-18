@@ -143,6 +143,26 @@ services:
                 condition: service_healthy
                 restart: false
 
+    orchestrator:
+        user: root
+        image: dxflow/ext-orchestrator:latest
+        restart: on-failure:1
+        container_name: dxflow-orchestrator
+        ports:
+            - 9107:9107
+        networks:
+            - dxflow
+        healthcheck:
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9107/public/healthcheck/"]
+            start_period: 8s
+            interval: 4s
+            timeout: 4s
+            retries: 4
+        depends_on:
+            redis:
+                condition: service_healthy
+                restart: false
+
     proxy:
         user: root
         image: dxflow/ext-proxy:latest
@@ -183,6 +203,9 @@ services:
             alarm:
                 condition: service_healthy
                 restart: false
+            orchestrator:
+                condition: service_healthy
+                restart: false
 
     signal:
         user: root
@@ -197,18 +220,6 @@ services:
                 "${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/ready/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}",
             ]
         depends_on:
-            redis:
-                condition: service_healthy
-                restart: false
-            syslog:
-                condition: service_started
-                restart: false
-            api:
-                condition: service_healthy
-                restart: false
-            storage:
-                condition: service_healthy
-                restart: false
             proxy:
                 condition: service_healthy
                 restart: false
