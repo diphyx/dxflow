@@ -1,6 +1,6 @@
 # dxflow
 
-dxflow public assets
+dxflow runner
 
 ### Case
 
