@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "name": "dxflow",
+            "path": "."
+        },
+        {
+            "name": "Proxy",
+            "path": "proxy/public"
+        }
+    ],
+    "settings": {}
+}
