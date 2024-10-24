@@ -6,7 +6,7 @@
         },
         {
             "name": "Proxy",
-            "path": "proxy/public"
+            "path": "proxy"
         }
     ],
     "settings": {}

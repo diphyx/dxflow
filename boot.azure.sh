@@ -31,7 +31,7 @@ install_packages() {
 # Send compute unit event
 send_compute_unit_events() {
     # Init URL
-    url="${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/events/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}"
+    url="http://diphyx.com/api/compute/units/${DXO_COMPUTE_UNIT_POINTER}/events/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}"
 
     # Send request
     curl -X PUT -H "Content-Type: application/json" -d "{\"type\": \"$1\", \"message\": \"$2\"}" "${url}" --connect-timeout 3 || true
@@ -41,11 +41,12 @@ send_compute_unit_events() {
 send_compute_unit_events "INFO" "booting"
 
 # Set environment variables
-echo "DXO_ENDPOINT=\"$DXO_ENDPOINT\"" >> /etc/environment
-echo "DXO_ZERO_KEY=\"$DXO_ZERO_KEY\"" >> /etc/environment
-echo "DXO_COMPUTE_UNIT_POINTER=\"$DXO_COMPUTE_UNIT_POINTER\"" >> /etc/environment
-echo "DXO_COMPUTE_UNIT_SECRET_KEY_RW=\"$DXO_COMPUTE_UNIT_SECRET_KEY_RW\"" >> /etc/environment
-echo "DXO_COMPUTE_UNIT_SECRET_KEY_RO=\"$DXO_COMPUTE_UNIT_SECRET_KEY_RO\"" >> /etc/environment
+{
+    echo "DXO_COMPUTE_UNIT_POINTER=\"$DXO_COMPUTE_UNIT_POINTER\""
+    echo "DXO_COMPUTE_UNIT_EXTENSIONS=\"$DXO_COMPUTE_UNIT_EXTENSIONS\""
+    echo "DXO_COMPUTE_UNIT_SECRET_KEY_RW=\"$DXO_COMPUTE_UNIT_SECRET_KEY_RW\""
+    echo "DXO_COMPUTE_UNIT_SECRET_KEY_RO=\"$DXO_COMPUTE_UNIT_SECRET_KEY_RO\""
+} >> /etc/environment
 
 # Create dx directory
 mkdir /dx

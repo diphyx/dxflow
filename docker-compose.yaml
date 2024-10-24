@@ -46,15 +46,15 @@ services:
         ports:
             - 9103:9103
         environment:
-            - DXF_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
-            - DXF_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+            - DXF_API_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_API_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
         volumes:
             - /volume:/volume
             - /var/run/docker.sock:/var/run/docker.sock
         networks:
             - dxflow
         healthcheck:
-            test: ["CMD", "curl", "-f", "-s", "http://localhost:9103/public/healthcheck/"]
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9103/healthcheck/"]
             start_period: 8s
             interval: 4s
             timeout: 4s
@@ -75,14 +75,14 @@ services:
         ports:
             - 9104:9104
         environment:
-            - DXF_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
-            - DXF_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+            - DXF_STORAGE_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_STORAGE_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
         volumes:
             - /volume:/volume
         networks:
             - dxflow
         healthcheck:
-            test: ["CMD", "curl", "-f", "-s", "http://localhost:9104/public/healthcheck/"]
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9104/healthcheck/"]
             start_period: 8s
             interval: 4s
             timeout: 4s
@@ -100,15 +100,14 @@ services:
         ports:
             - 9105:9105
         environment:
-            - DXF_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
-            - DXF_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
-            - DXF_SYNC_MAX_OPS=4
+            - DXF_SYNC_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_SYNC_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
         volumes:
             - /volume:/volume
         networks:
             - dxflow
         healthcheck:
-            test: ["CMD", "curl", "-f", "-s", "http://localhost:9105/public/healthcheck/"]
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9105/healthcheck/"]
             start_period: 8s
             interval: 4s
             timeout: 4s
@@ -126,14 +125,13 @@ services:
         ports:
             - 9106:9106
         environment:
-            - DXF_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
-            - DXF_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
-            - DXF_ALARM_ENDPOINT=${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/alarm/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
-            - DXF_ALARM_IDLE_TIMEOUT=60
+            - DXF_ALARM_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_ALARM_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+            - DXF_ALARM_COMPUTE_UNIT_POINTER=${DXO_COMPUTE_UNIT_POINTER}
         networks:
             - dxflow
         healthcheck:
-            test: ["CMD", "curl", "-f", "-s", "http://localhost:9106/public/healthcheck/"]
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9106/healthcheck/"]
             start_period: 8s
             interval: 4s
             timeout: 4s
@@ -153,7 +151,7 @@ services:
         networks:
             - dxflow
         healthcheck:
-            test: ["CMD", "curl", "-f", "-s", "http://localhost:9107/public/healthcheck/"]
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9107/healthcheck/"]
             start_period: 8s
             interval: 4s
             timeout: 4s
@@ -172,19 +170,18 @@ services:
             - 80:80
             - 443:443
         environment:
-            - DXF_PROXY_SERVER_IP=AUTO
-            - DXF_PROXY_HTTPS=TRUE
-            - DXF_PROXY_ZERO_KEY=${DXO_ZERO_KEY}
-            - DXF_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
-            - DXF_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+            - DXF_PROXY_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_PROXY_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+            - DXF_PROXY_EXTENSIONS=${DXO_COMPUTE_UNIT_EXTENSIONS}
+            - DXF_PROXY_COMPUTE_UNIT_POINTER=${DXO_COMPUTE_UNIT_POINTER}
         volumes:
             - /volume:/volume
         networks:
             - dxflow
         healthcheck:
-            test: ["CMD", "curl", "-f", "-s", "http://localhost/api/public/healthcheck/"]
+            test: ["CMD", "curl", "-f", "-s", "http://localhost/healthcheck/"]
             start_period: 16s
-            interval: 32s
+            interval: 16s
             timeout: 4s
             retries: 32
         depends_on:
@@ -217,7 +214,7 @@ services:
                 "curl",
                 "-X",
                 "PUT",
-                "${DXO_ENDPOINT}/compute/units/${DXO_COMPUTE_UNIT_POINTER}/ready/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}",
+                "http://diphyx.com/api/compute/units/${DXO_COMPUTE_UNIT_POINTER}/ready/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}",
             ]
         depends_on:
             proxy:
