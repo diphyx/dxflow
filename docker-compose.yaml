@@ -1,0 +1,275 @@
+name: dxflow
+services:
+    redis:
+        user: root
+        image: dxflow/redis:latest
+        restart: on-failure:1
+        container_name: dxflow-redis
+        ports:
+            - 6379:6379
+        volumes:
+            - /volume/.dx/redis:/bitnami/redis/data
+        networks:
+            - dxflow
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            start_period: 4s
+            interval: 4s
+            timeout: 4s
+            retries: 4
+
+    syslog:
+        user: root
+        image: dxflow/syslog:latest
+        restart: on-failure:1
+        container_name: dxflow-syslog
+        ports:
+            - 601:601/udp
+        networks:
+            - dxflow
+        healthcheck:
+            test: ["CMD", "sh", "-c", "nc -w1 -u localhost 601 || exit 1"]
+            start_period: 4s
+            interval: 4s
+            timeout: 4s
+            retries: 4
+        depends_on:
+            redis:
+                condition: service_healthy
+                restart: false
+
+    api:
+        user: root
+        image: dxflow/api:latest
+        restart: on-failure:1
+        container_name: dxflow-api
+        ports:
+            - 9103:9103
+        environment:
+            - DXF_API_VOLUME=/volume
+            - DXF_API_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_API_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+        volumes:
+            - /volume:/volume
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - dxflow
+        healthcheck:
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9103/healthcheck/"]
+            start_period: 8s
+            interval: 4s
+            timeout: 4s
+            retries: 4
+        depends_on:
+            redis:
+                condition: service_healthy
+                restart: false
+            syslog:
+                condition: service_started
+                restart: false
+
+    storage:
+        user: root
+        image: dxflow/ext-storage:latest
+        restart: on-failure:1
+        container_name: dxflow-storage
+        ports:
+            - 9104:9104
+        environment:
+            - DXF_STORAGE_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_STORAGE_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+        volumes:
+            - /volume:/volume
+        networks:
+            - dxflow
+        healthcheck:
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9104/healthcheck/"]
+            start_period: 8s
+            interval: 4s
+            timeout: 4s
+            retries: 4
+        depends_on:
+            redis:
+                condition: service_healthy
+                restart: false
+            api:
+                condition: service_healthy
+                restart: false
+
+    sync:
+        user: root
+        image: dxflow/ext-sync:latest
+        restart: on-failure:1
+        container_name: dxflow-sync
+        ports:
+            - 9105:9105
+        environment:
+            - DXF_SYNC_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_SYNC_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+            - DXF_SYNC_MAX_OPS=2
+        volumes:
+            - /volume:/volume
+        networks:
+            - dxflow
+        healthcheck:
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9105/healthcheck/"]
+            start_period: 8s
+            interval: 4s
+            timeout: 4s
+            retries: 4
+        depends_on:
+            redis:
+                condition: service_healthy
+                restart: false
+            api:
+                condition: service_healthy
+                restart: false
+
+    alarm:
+        user: root
+        image: dxflow/ext-alarm:latest
+        restart: on-failure:1
+        container_name: dxflow-alarm
+        ports:
+            - 9106:9106
+        environment:
+            - DXF_ALARM_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_ALARM_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+            - DXF_ALARM_COMPUTE_UNIT_POINTER=${DXO_COMPUTE_UNIT_POINTER}
+            - DXF_ALARM_IDLE_TIMEOUT=60
+        networks:
+            - dxflow
+        healthcheck:
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9106/healthcheck/"]
+            start_period: 8s
+            interval: 4s
+            timeout: 4s
+            retries: 4
+        depends_on:
+            redis:
+                condition: service_healthy
+                restart: false
+            api:
+                condition: service_healthy
+                restart: false
+
+    terminal:
+        user: root
+        image: dxflow/ext-terminal:latest
+        restart: on-failure:1
+        container_name: dxflow-terminal
+        ports:
+            - 9107:9107
+        environment:
+            - DXF_TERMINAL_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_TERMINAL_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+            - DXF_TERMINAL_ASSETS_UPDATE=TRUE
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - dxflow
+        healthcheck:
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9107/healthcheck/"]
+            start_period: 8s
+            interval: 4s
+            timeout: 4s
+            retries: 4
+        depends_on:
+            redis:
+                condition: service_healthy
+                restart: false
+            api:
+                condition: service_healthy
+                restart: false
+
+    orchestrator:
+        user: root
+        image: dxflow/ext-orchestrator:latest
+        restart: on-failure:1
+        container_name: dxflow-orchestrator
+        ports:
+            - 9108:9108
+        networks:
+            - dxflow
+        healthcheck:
+            test: ["CMD", "curl", "-f", "-s", "http://localhost:9108/healthcheck/"]
+            start_period: 8s
+            interval: 4s
+            timeout: 4s
+            retries: 4
+        depends_on:
+            api:
+                condition: service_healthy
+                restart: false
+
+    proxy:
+        user: root
+        image: dxflow/ext-proxy:latest
+        restart: on-failure:1
+        container_name: dxflow-proxy
+        ports:
+            - 80:80
+            - 443:443
+        environment:
+            - DXF_PROXY_SECRET_KEY_RW=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}
+            - DXF_PROXY_SECRET_KEY_RO=${DXO_COMPUTE_UNIT_SECRET_KEY_RO}
+            - DXF_PROXY_EXTENSIONS=${DXO_COMPUTE_UNIT_EXTENSIONS}
+            - DXF_PROXY_ASSETS_UPDATE=TRUE
+            - DXF_PROXY_COMPUTE_UNIT_POINTER=${DXO_COMPUTE_UNIT_POINTER}
+            - DXF_PROXY_CERTIFICATE=AUTO
+            - DXF_PROXY_CERTIFICATE_ENDPOINT=AUTO
+            - DXF_PROXY_CERTIFICATE_RETRY=30
+            - DXF_PROXY_HTTPS=TRUE
+        volumes:
+            - /volume:/volume
+        networks:
+            - dxflow
+        healthcheck:
+            test: ["CMD", "curl", "-f", "-s", "http://localhost/healthcheck/"]
+            start_period: 16s
+            interval: 16s
+            timeout: 4s
+            retries: 32
+        depends_on:
+            redis:
+                condition: service_healthy
+                restart: false
+            api:
+                condition: service_healthy
+                restart: false
+            storage:
+                condition: service_healthy
+                restart: false
+            sync:
+                condition: service_healthy
+                restart: false
+            alarm:
+                condition: service_healthy
+                restart: false
+            terminal:
+                condition: service_healthy
+                restart: false
+            orchestrator:
+                condition: service_healthy
+                restart: false
+
+    signal:
+        user: root
+        image: dxflow/alpine:latest
+        restart: on-failure:2
+        container_name: dxflow-signal
+        command:
+            [
+                "curl",
+                "-X",
+                "PUT",
+                "http://diphyx.com/api/compute/units/${DXO_COMPUTE_UNIT_POINTER}/ready/?secret-key=${DXO_COMPUTE_UNIT_SECRET_KEY_RW}",
+            ]
+        depends_on:
+            proxy:
+                condition: service_healthy
+                restart: false
+
+networks:
+    dxflow:
+        name: dxflow-network
