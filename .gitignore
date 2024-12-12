@@ -1,0 +1,8 @@
+.DS_Store
+.env
+bin
+tmp
+volume
+vendor
+dist
+node_modules
