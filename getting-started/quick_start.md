@@ -1,0 +1,16 @@
+---
+title: Quick Start
+description: Get up and running with dxflow in minutes with this simple step-by-step guide
+---
+
+# Quick Start
+
+This guide will help you quickly set up and run a simple dxflow project.
+
+The first step is to install the dxflow engine. You can do this by downloading and installing the latest release by following the [installation guide](/getting-started/installation).
+
+Now that you have the dxflow engine installed, you can start using it. Let's check if the installation was successful by running the following command:
+
+```/dev/null/terminal.sh#L1-1
+dxflow --version
+```
