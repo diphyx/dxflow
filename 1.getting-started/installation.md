@@ -16,34 +16,34 @@ Here are the links to the latest releases for each platform:
 
 ### x86
 
-::card-grid{cols="3"}
-  ::card{link="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_linux_amd64.tar.gz" title="Linux" tag="x86" tagType="info"}
+::card-group
+  ::card{title="Linux" icon="i-devicon:linux" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_linux_amd64.tar.gz"}
   ::
 
-  ::card{link="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_darwin_amd64.tar.gz" title="macOS" tag="x86" tagType="info"}
+  ::card{title="macOS" icon="i-devicon:apple" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_darwin_amd64.tar.gz"}
   ::
 
-  ::card{link="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_windows_amd64.tar.gz" title="Windows" tag="x86" tagType="info"}
+  ::card{title="Windows" icon="i-devicon:windows8" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_windows_amd64.tar.gz"}
   ::
 ::
 
 ### ARM64
 
-::card-grid{cols="3"}
-  ::card{link="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_linux_arm64.tar.gz" title="Linux" tag="ARM64" tagType="info"}
+::card-group
+  ::card{title="Linux" icon="i-devicon:linux" color="teal" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_linux_arm64.tar.gz"}
   ::
 
-  ::card{link="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_darwin_arm64.tar.gz" title="macOS" tag="ARM64" tagType="info"}
+  ::card{title="macOS" icon="i-devicon:apple" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_darwin_arm64.tar.gz"}
   ::
 
-  ::card{link="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_windows_arm64.tar.gz" title="Windows" tag="ARM64" tagType="info"}
+  ::card{title="Windows" icon="i-devicon:windows8" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_windows_arm64.tar.gz"}
   ::
 ::
 
 ## Installation Steps
 
-::tabs{items="Linux,MacOS,Windows" defaultIndex="0"}
-  ::tab{name="Linux"}
+::tabs
+  ::tab-item{label="Linux" icon="i-devicon:linux"}
     ::steps
       ### Step 1
       Unzip the downloaded file to `/usr/local/bin` or any directory in your `PATH`. For example, on Linux, you can use the following command:
@@ -61,7 +61,7 @@ Here are the links to the latest releases for each platform:
     ::
   ::
 
-  ::tab{name="MacOS"}
+  ::tab-item{label="MacOS" icon="i-devicon:apple"}
     ::steps
       ### Step 1
       Unzip the downloaded file to `/usr/local/bin` or any directory in your `PATH`. For example, on macOS, you can use the following command:
@@ -89,7 +89,7 @@ Here are the links to the latest releases for each platform:
     ::
   ::
 
-  ::tab{name="Windows"}
+  ::tab-item{label="Windows" icon="i-devicon:windows8"}
     ::steps
       ### Step 1
       Unzip the downloaded file to `C:\Program Files\diphyx` directory
