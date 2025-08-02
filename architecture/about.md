@@ -1,3 +1,8 @@
+---
+title: About architecture
+description: Architecture of dxflow
+---
+
 # About dxflow
 
 ## 1. Our Journey
@@ -40,5 +45,5 @@ Our core team brings over 20 years of combined experience on national supercompu
 
 ## 7. Join the Journey
 
-Ready to move beyond cluster chaos and focus on groundbreaking insights?  
+Ready to move beyond cluster chaos and focus on groundbreaking insights?
 [Sign up for early access](#) or [schedule a demo](#) to experience dxflow in action.

@@ -1,7 +1,8 @@
 ---
 title: dxflow engine
 description: A powerful workflow engine for Docker, Slurm and more, providing both CLI and API interfaces for seamless integration
-layout: home
+navigation:
+    icon: i-hugeicons:start-up-02
 ---
 
 ::hero

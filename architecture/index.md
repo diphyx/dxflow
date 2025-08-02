@@ -1,4 +1,7 @@
-
+---
+title: Architecture
+description: dxflow is a platform that enables users to manage and orchestrate their data & compute workflows across different computing environments. It provides a unified interface for interacting with compute units, including API, CLI, and web console.
+---
 
 ## Deployment Patterns
 There are two deployment patterns for dxflow:
@@ -48,4 +51,3 @@ This design mirrors the side-car model popularised by Dapr: place a lightweight 
 
 ### Federated Master Deployment
 In the federated master deployment, a single dxflow instance acts as a control plane for the entire fleet of compute nodes. This master instance orchestrates the dxflow agents running on each node or container, providing a centralized interface for managing and monitoring the computational tasks. This setup is particularly useful for larger deployments where centralized management and monitoring are required.
-
