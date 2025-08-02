@@ -17,33 +17,33 @@ Here are the links to the latest releases for each platform:
 ### x86
 
 ::card-group
-  ::card{title="Linux" icon="i-devicon:linux" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_linux_amd64.tar.gz"}
+  ::card{title="Linux" icon="i-fa7-brands:linux" color="neutral" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_linux_amd64.tar.gz"}
   ::
 
-  ::card{title="macOS" icon="i-devicon:apple" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_darwin_amd64.tar.gz"}
+  ::card{title="macOS" icon="i-fa7-brands:apple" color="neutral" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_darwin_amd64.tar.gz"}
   ::
 
-  ::card{title="Windows" icon="i-devicon:windows8" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_windows_amd64.tar.gz"}
+  ::card{title="Windows" icon="i-fa7-brands:windows" color="neutral" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_windows_amd64.tar.gz"}
   ::
 ::
 
 ### ARM64
 
 ::card-group
-  ::card{title="Linux" icon="i-devicon:linux" color="teal" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_linux_arm64.tar.gz"}
+  ::card{title="Linux" icon="i-fa7-brands:linux" color="neutral" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_linux_arm64.tar.gz"}
   ::
 
-  ::card{title="macOS" icon="i-devicon:apple" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_darwin_arm64.tar.gz"}
+  ::card{title="macOS" icon="i-fa7-brands:apple" color="neutral" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_darwin_arm64.tar.gz"}
   ::
 
-  ::card{title="Windows" icon="i-devicon:windows8" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_windows_arm64.tar.gz"}
+  ::card{title="Windows" icon="i-fa7-brands:windows" color="neutral" to="https://github.com/diphyx/dxflow-docs/releases/download/v1.0.1/dxflow_1.0.1_windows_arm64.tar.gz"}
   ::
 ::
 
 ## Installation Steps
 
 ::tabs
-  ::tab-item{label="Linux" icon="i-devicon:linux"}
+  ::tab-item{label="Linux" icon="i-fa7-brands:linux"}
     ::steps
       ### Step 1
       Unzip the downloaded file to `/usr/local/bin` or any directory in your `PATH`. For example, on Linux, you can use the following command:
@@ -61,7 +61,7 @@ Here are the links to the latest releases for each platform:
     ::
   ::
 
-  ::tab-item{label="MacOS" icon="i-devicon:apple"}
+  ::tab-item{label="MacOS" icon="i-fa7-brands:apple"}
     ::steps
       ### Step 1
       Unzip the downloaded file to `/usr/local/bin` or any directory in your `PATH`. For example, on macOS, you can use the following command:
@@ -89,7 +89,7 @@ Here are the links to the latest releases for each platform:
     ::
   ::
 
-  ::tab-item{label="Windows" icon="i-devicon:windows8"}
+  ::tab-item{label="Windows" icon="i-fa7-brands:windows"}
     ::steps
       ### Step 1
       Unzip the downloaded file to `C:\Program Files\diphyx` directory
