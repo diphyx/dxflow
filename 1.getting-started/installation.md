@@ -111,3 +111,4 @@ Copy and paste the following command in your terminal to install dxflow engine a
 
 ```bash
 wget -qO- https://raw.githubusercontent.com/diphyx/dxflow-docs/main/getting-started/installation/install.sh | sudo bash -s dxflow
+```
