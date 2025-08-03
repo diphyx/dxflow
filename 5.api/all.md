@@ -1,6 +1,6 @@
 ---
 title: dxflow API Reference
-description: The API can be accessed at `http://localhost:8080/api/v1`, through IP, or dxflow.ai proxy from a remote device, when the dxflow engine is running. The API provides endpoints for managing workflows, files, shells, and other resources. You can use tools like `curl` or Postman to interact with the API.
+description: Access API at `http://localhost:8080/api/v1`.
 navigation:
     icon: i-hugeicons:api
 ---
@@ -8,6 +8,20 @@ navigation:
 # dxflow API Reference
 
 The API can be accessed at `http://localhost:8080/api/v1`, through IP, or dxflow.ai proxy from a remote device, when the dxflow engine is running. The API provides endpoints for managing workflows, files, shells, and other resources. You can use tools like `curl` or Postman to interact with the API.
+
+
+
+:::code-group
+
+```bash [bash]
+pnpm add @nuxt/ui-pro@next
+```
+
+```bash [Python]
+yarn add @nuxt/ui-pro@next
+```
+
+:::
 
 
 ## Authentication Guide
@@ -583,15 +597,77 @@ curl -X PUT -H "Content-Type: application/json" \
 http://localhost/api/workflow/compose/pause/
 ```
 ---
+## Compose Workflow Management REST API
+
+The Compose Workflow REST API allows you to stop, pause, unpause, execute commands on, and kill compose workflows. All endpoints are hosted under the `/api/workflow/compose/` route on the dxflow server.
+
+### Table of Contents
+
+- [Stop Compose Workflow](#stop-compose-workflow)
+- [Pause Compose Workflow](#pause-compose-workflow)
+- [Unpause Compose Workflow](#unpause-compose-workflow)
+- [Execute Compose Workflow](#execute-compose-workflow)
+- [Kill Compose Workflow](#kill-compose-workflow)
+
+---
+
+### Stop Compose Workflow
+
+**Endpoint:** `/api/workflow/compose/stop/`  
+**Method:** `PUT`  
+**Content-Type:** `application/json`  
+
+Stops a running compose workflow. Returns a JSON confirmation on success.
+
+**Request Body:**
+| Field     | Type   | Description                |
+|-----------|--------|---------------------------|
+| identity  | string | Workflow identifier (required) |
+
+**Example:**
+```bash
+curl -X PUT -H "Content-Type: application/json" \
+-d '{"identity": "workflow_id"}' \
+http://localhost/api/workflow/compose/stop/
+```
+
+---
+
+### Pause Compose Workflow
+
+**Endpoint:** `/api/workflow/compose/pause/`  
+**Method:** `PUT`  
+**Content-Type:** `application/json`  
+
+Pauses an active compose workflow without stopping it completely. Returns a JSON confirmation.
+
+**Request Body:**
+| Field     | Type   | Description                |
+|-----------|--------|---------------------------|
+| identity  | string | Workflow identifier (required) |
+
+**Example:**
+```bash
+curl -X PUT -H "Content-Type: application/json" \
+-d '{"identity": "workflow_id"}' \
+http://localhost/api/workflow/compose/pause/
+```
+
+---
 
 ### Unpause Compose Workflow
 
-- **Method:** PUT  
-- **Endpoint:** `/api/workflow/compose/unpause/`  
-- **Content-Type:** `application/json`  
-- **Description:**  
-Resume a paused workflow. Confirm that the workflow is reinstated with a JSON response.
-    
+**Endpoint:** `/api/workflow/compose/unpause/`  
+**Method:** `PUT`  
+**Content-Type:** `application/json`  
+
+Resumes a paused workflow. Returns a JSON confirmation.
+
+**Request Body:**
+| Field     | Type   | Description                |
+|-----------|--------|---------------------------|
+| identity  | string | Workflow identifier (required) |
+
 **Example:**
 ```bash
 curl -X PUT -H "Content-Type: application/json" \
@@ -603,29 +679,41 @@ http://localhost/api/workflow/compose/unpause/
 
 ### Execute Compose Workflow
 
-- **Method:** PUT  
-- **Endpoint:** `/api/workflow/compose/execute/`  
-- **Content-Type:** `application/json`  
-- **Description:**  
-Execute a command on the given compose workflow. Ideal for triggering actions or updating configurations dynamically.
-    
+**Endpoint:** `/api/workflow/compose/execute/`  
+**Method:** `PUT`  
+**Content-Type:** `application/json`  
+
+Executes a command on the given compose workflow. Useful for triggering actions or updating configurations dynamically.
+
+**Request Body:**
+| Field     | Type   | Description                |
+|-----------|--------|---------------------------|
+| identity  | string | Workflow identifier (required) |
+| command   | string | Command to execute (required)  |
+
 **Example:**
 ```bash
 curl -X PUT -H "Content-Type: application/json" \
 -d '{"identity": "workflow_id", "command": "your_command"}' \
 http://localhost/api/workflow/compose/execute/
 ```
+
 ---
 
 ### Kill Compose Workflow
 
-- **Method:** PUT  
-- **Endpoint:** `/api/workflow/compose/kill/`  
-- **Content-Type:** `application/json`  
-- **Description:**  
-Forcefully terminate a compose workflow that is not responding to normal stop commands. Returns a confirmation message in JSON.
-    
-**Example:**  
+**Endpoint:** `/api/workflow/compose/kill/`  
+**Method:** `PUT`  
+**Content-Type:** `application/json`  
+
+Forcefully terminates a compose workflow that is not responding to normal stop commands. Returns a JSON confirmation.
+
+**Request Body:**
+| Field     | Type   | Description                |
+|-----------|--------|---------------------------|
+| identity  | string | Workflow identifier (required) |
+
+**Example:**
 ```bash
 curl -X PUT -H "Content-Type: application/json" \
 -d '{"identity": "workflow_id"}' \
