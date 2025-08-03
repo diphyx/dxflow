@@ -1,3 +1,9 @@
+---
+title:
+description:
+draft: true
+---
+
 # dxflow key
 
 The `dxflow key` command provides a suite of subcommands to manage authentication keys. A key is a 2048-bit RSA key-pair used for authenticating with the dxflow engine. Each key is bound to an identity (similar to a username) and can be assigned one or more permissions (`read`, `write`, `execute`, `admin`).

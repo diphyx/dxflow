@@ -1,4 +1,10 @@
-# `dxflow engine` 
+---
+title:
+description:
+draft: true
+---
+
+# `dxflow engine`
 
 The `dxflow engine` command provides comprehensive tools for managing the engine, including boot control, health checks, authorized key management, pinging the engine, and generating tokens. Below is a detailed breakdown of each subcommand and its options.
 

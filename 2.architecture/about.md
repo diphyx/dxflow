@@ -1,6 +1,7 @@
 ---
 title: About architecture
 description: Architecture of dxflow
+draft: true
 ---
 
 # About dxflow
