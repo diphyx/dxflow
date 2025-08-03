@@ -1,3 +1,10 @@
+---
+title: dxflow API Reference
+description: The API can be accessed at `http://localhost:8080/api/v1`, through IP, or dxflow.ai proxy from a remote device, when the dxflow engine is running. The API provides endpoints for managing workflows, files, shells, and other resources. You can use tools like `curl` or Postman to interact with the API.
+navigation:
+    icon: i-hugeicons:api
+---
+
 # dxflow API Reference
 
 The API can be accessed at `http://localhost:8080/api/v1`, through IP, or dxflow.ai proxy from a remote device, when the dxflow engine is running. The API provides endpoints for managing workflows, files, shells, and other resources. You can use tools like `curl` or Postman to interact with the API.
