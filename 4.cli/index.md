@@ -1,5 +1,5 @@
 ---
-title: start
+title: Command Line Interface
 description: The dxflow command line interface (CLI) is a powerful tool that allows you to interact with the dxflow engine directly from your terminal. It provides a wide range of commands for managing workflows, files, and system operations.
 ---
 

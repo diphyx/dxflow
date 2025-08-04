@@ -8,7 +8,7 @@ draft: true
 
 ## 1. Our Journey
 
-dxflow began as an internal initiative at DiPhyX to streamline sprawling scripts, clusters, and ad-hoc logs that slow down scientific progress. Initially a weekend hack intended to create a "MLFlow for physics and chemistry," it has evolved through numerous projects in bioinformatics, CFD, and materials science into a robust, production-grade engine available for everyone.
+dxflow began as an internal initiative at [DiPhyX](https://www.diphyx.com) to streamline sprawling scripts, clusters, and ad-hoc logs that slow down scientific progress. Initially a weekend hack intended to create a "MLFlow for physics and chemistry," it has evolved through numerous projects in bioinformatics, CFD, and materials science into a robust, production-grade engine available for everyone.
 
 ## 2. Our Mission
 
