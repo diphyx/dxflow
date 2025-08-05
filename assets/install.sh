@@ -49,7 +49,7 @@ echo "Installing dxflow ..."
 # Define a temporary directory for download
 TEMP_DIR=$(mktemp -d)
 # Retrieve the latest version tag from GitHub without using jq
-LATEST_URL=$(curl -s https://api.github.com/repos/diphyx/dxflow-docs/tags | grep -m 1 '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/')
+LATEST_URL=$(curl -s https://api.github.com/repos/diphyx/dxflow/tags | grep -m 1 '"name":' | sed -E 's/.*"name": *"([^"]+)".*/\1/')
 if [ -z "$LATEST_URL" ]; then
     echo "Error: Unable to retrieve the latest version tag from GitHub."
     exit 1
@@ -60,7 +60,7 @@ CLEAN_VERSION=${VERSION#v}
 echo "Downloading dxflow version ${CLEAN_VERSION} for ${OS} ${ARCH}..."
 CLI_ARCHIVE="${TEMP_DIR}/dxflow_${CLEAN_VERSION}_${OS}_${ARCH}.tar.gz"
 # Remove the leading "v" from the version for the file name
-GITHUB_URL="https://github.com/diphyx/dxflow-docs/releases/download/v${CLEAN_VERSION}/dxflow_${CLEAN_VERSION}_${OS}_${ARCH}.tar.gz"
+GITHUB_URL="https://github.com/diphyx/dxflow/releases/download/v${CLEAN_VERSION}/dxflow_${CLEAN_VERSION}_${OS}_${ARCH}.tar.gz"
 echo "Downloading from: ${GITHUB_URL}"
 # Download the CLI archive
 wget -qO "${CLI_ARCHIVE}" "${GITHUB_URL}"
