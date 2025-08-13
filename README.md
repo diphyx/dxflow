@@ -86,10 +86,6 @@ dxflow operates as a lightweight 4-layer architecture:
 - **Storage**: 100MB disk space
 - **Network**: Internet connection for installation
 
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/diphyx/dxflow/issues)
@@ -99,7 +95,3 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 ## About DiPhyx
 
 dxflow is developed by [DiPhyx](https://diphyx.com), providing enterprise-grade distributed computing solutions.
-
----
-
-**Transform any machine into a computational powerhouse with dxflow**
