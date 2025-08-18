@@ -41,7 +41,7 @@ Get started with dxflow in minutes:
 
 ## Why dxflow?
 
-::alert{type="success"}
+::callout{color="green"}
 dxflow transforms distributed computing by providing enterprise-grade workflow orchestration across any accessible infrastructure.
 ::
 
