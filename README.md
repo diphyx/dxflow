@@ -1,6 +1,6 @@
 # dxflow Engine
 
-A powerful distributed computing engine that transforms any accessible machine into a first-class member of your computational fleet.
+A powerful workflow engine for Docker, Slurm and more, providing both CLI and API interfaces for seamless integration. Transform any accessible machine into a first-class member of your computational fleet.
 
 [![License](https://img.shields.io/badge/License-Free%20until%202030-green)](5.advanced/02.licensing.md)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-blue)]()
@@ -13,12 +13,13 @@ dxflow provides a unified interface for orchestrating workflows across different
 ### Key Features
 
 - **Universal Deployment** - Deploy on any infrastructure: cloud VMs, GPU nodes, HPC clusters, or laptops
-- **Unified Interface** - Consistent CLI, REST API, and web UI across all environments
+- **Unified Interface** - Consistent CLI, REST API, and intuitive web UI across all environments
 - **Container Orchestration** - Native Docker Compose integration with real-time monitoring
 - **Secure by Design** - RSA key-pair authentication with fine-grained access control
 - **Real-time Monitoring** - Live logs, metrics, and workflow status tracking
-- **Multi-Scheduler Support** - Works with Docker, Kubernetes, Slurm, and other schedulers
+- **Multi-Scheduler Support** - Works with Docker, Kubernetes, Slurm, PBS, and other schedulers
 - **Secure Tunneling** - Expose services through authenticated WebSocket bridges
+- **Bridge Mode** - Secure proxy connections for remote access and federation
 
 ## Quick Start
 
@@ -68,6 +69,9 @@ dxflow engine ping
 
 # Get system information
 dxflow engine info
+
+# Update to latest version
+dxflow engine update
 ```
 
 ## Architecture
@@ -123,15 +127,15 @@ Comprehensive documentation is available in the following sections:
 
 - **[Getting Started](1.getting-started/00.index.md)** - Installation and first steps
 - **[User Interface](2.interface/00.index.md)** - Web-based management console
-- **[CLI Reference](3.cli/000.index.md)** - Command-line interface guide
-- **[API Documentation](4.api/000.index.md)** - REST API integration
+- **[CLI Reference](3.cli/000.index.md)** - Complete command-line interface guide with command matrix
+- **[API Documentation](4.api/000.index.md)** - REST API integration and endpoints
 
 ### 🎯 Advanced Topics
 
 - **[Advanced Concepts](5.advanced/00.index.md)** - Architecture and deployment patterns
 - **[Licensing](5.advanced/02.licensing.md)** - License management and permissions
 - **[Boot Configuration](5.advanced/03.boot.md)** - Engine startup and daemon modes
-- **[Authentication](5.advanced/04.auth.md)** - Security and access control
+- **[Authentication](5.advanced/04.authentication.md)** - Security and access control
 - **[Streaming](5.advanced/05.streaming.md)** - Real-time data and event handling
 - **[Tunneling](5.advanced/06.tunneling.md)** - Secure proxy and bridge connections
 
@@ -193,12 +197,16 @@ For advanced features like bridge connections or custom licensing, see the [lice
 
 dxflow is developed by [DiPhyX](https://diphyx.com), a company founded by scientists with over 20 years of combined experience on national supercomputers and more than 50 published papers. We understand the challenges of computational research and build tools to accelerate scientific discovery.
 
+### Our Journey
+
+dxflow began as an internal initiative at DiPhyX to streamline sprawling scripts, clusters, and ad-hoc logs that slow down scientific progress. Initially a weekend hack intended to create a "MLFlow for physics and chemistry," it has evolved through numerous projects in bioinformatics, CFD, and materials science into a robust, production-grade engine available for everyone.
+
 ### Our Mission
 
-To accelerate scientific innovation by providing unified, scalable, and intuitive computing platforms for end-to-end computational pipelines.
+To accelerate scientific innovation by providing unified, scalable, and intuitive cloud platforms for end-to-end computational pipelines.
 
 ### Our Approach
 
 - **Scientific-First**: Built for real research needs, not just enterprise IT
 - **No Vendor Lock-in**: Runs on your existing infrastructure
-- **Researcher-Friendly**: Designed by scientists who understand computational workflows
+- **Researcher-Friendly**: Designed by scientists who understand computational workflows and the pain of failed overnight runs
