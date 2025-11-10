@@ -2,7 +2,7 @@
 
 A powerful workflow engine for Docker, Slurm and more, providing both CLI and API interfaces for seamless integration. Transform any accessible machine into a first-class member of your computational fleet.
 
-[![License](https://img.shields.io/badge/License-Free%20until%202030-green)](5.advanced/02.licensing.md)
+[![License](https://img.shields.io/badge/License-Free%20until%202030-green)](docs/5.advanced/02.licensing.md)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-blue)]()
 [![Architecture](https://img.shields.io/badge/Arch-x86__64%20%7C%20ARM64-blue)]()
 
@@ -125,23 +125,44 @@ Comprehensive documentation is available in the following sections:
 
 ### 📚 Core Documentation
 
-- **[Getting Started](1.getting-started/00.index.md)** - Installation and first steps
-- **[User Interface](2.interface/00.index.md)** - Web-based management console
-- **[CLI Reference](3.cli/000.index.md)** - Complete command-line interface guide with command matrix
-- **[API Documentation](4.api/000.index.md)** - REST API integration and endpoints
+- **[Getting Started](docs/1.getting-started/00.index.md)** - Installation and first steps
+- **[User Interface](docs/2.interface/00.index.md)** - Web-based management console
+- **[CLI Reference](docs/3.cli/000.index.md)** - Complete command-line interface guide with command matrix
+- **[API Documentation](docs/4.api/000.index.md)** - REST API integration and endpoints
 
 ### 🎯 Advanced Topics
 
-- **[Advanced Concepts](5.advanced/00.index.md)** - Architecture and deployment patterns
-- **[Licensing](5.advanced/02.licensing.md)** - License management and permissions
-- **[Boot Configuration](5.advanced/03.boot.md)** - Engine startup and daemon modes
-- **[Authentication](5.advanced/04.authentication.md)** - Security and access control
-- **[Streaming](5.advanced/05.streaming.md)** - Real-time data and event handling
-- **[Tunneling](5.advanced/06.tunneling.md)** - Secure proxy and bridge connections
+- **[Advanced Concepts](docs/5.advanced/00.index.md)** - Architecture and deployment patterns
+- **[Licensing](docs/5.advanced/02.licensing.md)** - License management and permissions
+- **[Boot Configuration](docs/5.advanced/03.boot.md)** - Engine startup and daemon modes
+- **[Authentication](docs/5.advanced/04.authentication.md)** - Security and access control
+- **[Streaming](docs/5.advanced/05.streaming.md)** - Real-time data and event handling
+- **[Tunneling](docs/5.advanced/06.tunneling.md)** - Secure proxy and bridge connections
 
 ### ❓ Help & Support
 
-- **[FAQs](6.faqs/00.index.md)** - Common questions and solutions
+- **[FAQs](docs/6.faqs/00.index.md)** - Common questions and solutions
+
+## Workflow Hub
+
+Pre-configured workflows and applications ready to deploy:
+
+### 📖 Getting Started
+
+- **[Getting Started](hub/1.getting-started/00.index.md)** - Learn how dxflow Hub works and deploy workflows
+
+### 🧬 Scientific Computing
+
+- **[Genomics](hub/2.genomics/00.index.md)** - DNA/RNA sequencing analysis workflows
+- **[Molecular](hub/3.molecular/00.index.md)** - Molecular simulation tools (GROMACS, Amber)
+- **[Structural](hub/4.structural/00.index.md)** - Cryo-EM and structure prediction workflows
+
+### 📊 Data Science & Engineering
+
+- **[Data Science](hub/5.data-science/00.index.md)** - Jupyter, VS Code, Python/R environments
+- **[Fluid Flow](hub/6.fluid-flow/00.index.md)** - CFD tools (OpenFOAM, SU2)
+
+Each workflow includes complete Docker Compose configurations, setup guides, and best practices. Browse the hub to find production-ready solutions for your research domain.
 
 ## System Requirements
 
@@ -176,7 +197,7 @@ dxflow includes a **General License** that provides:
 - ✅ **No Registration Required** - Start using immediately
 - ✅ **Production Ready** - No limitations for real workloads
 
-For advanced features like bridge connections or custom licensing, see the [licensing documentation](5.advanced/02.licensing.md).
+For advanced features like bridge connections or custom licensing, see the [licensing documentation](docs/5.advanced/02.licensing.md).
 
 ## Getting Help
 
